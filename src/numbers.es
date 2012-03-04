@@ -2,11 +2,14 @@ module numbers {
   module log from 'log';
   module monads from 'monads';
   class Sections {
-    constructor() {
-      private element, sections;
+    constructor(properties={sets:[]}) {
+      private element, sections, sets;
       @element = monads.DOMable({tagName:'section'}).on('load').attributes({'class':'sections'}).insert(document.body);
+      @sets = properties.sets;
       @sections = [];
-      @sections.push(Section());
+      @sets.forEach(function(set) {
+        @sections.push(Section({set:set}));
+      }, this);
       @sections.forEach(function(section) {
         @element.add(section);
       }, this);
@@ -14,15 +17,15 @@ module numbers {
     }
     static init = (function() {
       var styles = [
-        {selector:'.sections',style:"display:-webkit-box;-webkit-box-orient:horizontal;-webkit-box-pack:center;-webkit-box-align:center;"}
+        {selector:'.sections',style:"display:-webkit-box;-webkit-box-pack:center;-webkit-box-align:center;margin:10em auto;"}
       ];
       monads.Styleable(styles).on("load").onstyle();
     })()
   }
   class Section {
-    constructor() {
+    constructor(properties={}) {
       private element, numbers;
-      @numbers = Numbers({panelCount:10});
+      @numbers = Numbers(properties);
       @element = monads.DOMable({tagName:'section'}).on('load').attributes({'class':'section'}).add(
         @numbers.element
       ).insert(document.body);
@@ -31,24 +34,24 @@ module numbers {
     }
     static init = (function() {
       var styles = [
-        {selector:'.section',style:"top:50%;width:210px;height:140px;position:relative;margin:0 auto 40px;border:1px solid #CCC;-webkit-perspective:1100px;overflow:hidden;"}
+        {selector:'.section',style:"width:210px;height:140px;border:1px solid #CCC;-webkit-perspective:1100px;overflow:hidden;"}
       ];
       monads.Styleable(styles).on("load").onstyle();
     })()
   }
   class Numbers {
     constructor(properties={}) {
-      private children, element, horizontal, panelCount, panelSize, radius, rotateFn, rotation, theta, totalPanelCount;
+      private children, element, horizontal, panelCount, panelSize, radius, rotateFn, rotation, set, theta;
       @children = [];
       @element = monads.DOMable({tagName:'div'}).on('load').attributes({'class':'numbers'});
       @rotation = 0;
-      @panelCount = properties.panelCount || 0;
-      @totalPanelCount = 20;
+      @set = properties.set;
+      @panelCount = @set.length || 0;
       @theta = 0;
       @horizontal = false;
-      for (var i = 0; i < @totalPanelCount; i++ ) {
-        @children.push(monads.DOMable({tagName:'figure'}).on('load').attributes({'class':'field'}).text(i+""));
-      }
+      @set.forEach(function(character) {
+        @children.push(monads.DOMable({tagName:'figure'}).on('load').attributes({'class':'field'}).text(character));
+      }, this);
       @children.forEach(function(child) {
         @element.add(child);
       }, this);
@@ -67,14 +70,13 @@ log.Logger.debug(this,@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + '
           panel.style({'opacity':'1','background-color':'hsla(' + angle + ', 100%, 50%, 0.8)','-webkit-transform':@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + 'px)'});
         }
       }
-      for (  ; i < @totalPanelCount; i++ ) {
+      for (  ; i < @set.length; i++ ) {
         panel = @element.child(i);
         if(panel) {
           panel.style.opacity = 0;
           panel.style[ '-webkit-transform' ] = 'none';
         }
       }
-      // adjust rotation so panels are always flat
       @rotation = Math.round( @rotation / @theta ) * @theta;
       this.transform();
       return this;
@@ -97,7 +99,7 @@ log.Logger.debug(this,@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + '
   }
   class AppType {
     constructor() {
-      Sections();
+      Sections({sets:[['0','1','2','3','4','5','6','7','8','9'],['\\u002D','\\u00D7','\\u00F7','\\u002B'],['0','1','2','3','4','5','6','7','8','9'],['\\u003D','\\u003D'],['10','20','30']]});
     }
   }
   export const App = AppType();
