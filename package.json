@@ -1,0 +1,14 @@
+{
+  "name"          : "numbers",
+  "version"       : "0.1",
+  "description"   : "numbers app",
+  "url"           : "http://kkasravi.github.com/numbers.git",
+  "keywords"      : ["css3", "numbers"],
+  "author"        : "Kam Kasravi <kkasravi@yahoo.com>",
+  "dependencies"  : {
+    "require": "*",
+    "monads": "*"
+  },
+  "lib"           : "./lib",
+  "main"          : "./lib/numbers.js"
+}
