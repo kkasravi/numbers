@@ -1,7 +1,7 @@
 module numbers {
   module log from 'log';
   module monads from 'monads';
-  class Sections {
+  export class Sections {
     constructor(properties={sets:[]}) {
       private element, sections, sets;
       @element = monads.DOMable({tagName:'section'}).on('load').attributes({'class':'sections'}).insert(document.body);
@@ -15,13 +15,13 @@ module numbers {
       }, this);
       return @element;
     }
-    static init = (function() {
+    static style = (function() {
       var styles = [
         {selector:'.sections',style:"display:-webkit-box;-webkit-box-pack:center;-webkit-box-align:center;margin:10em auto;"}
       ];
-      monads.Styleable(styles).on("load").onstyle();
+      return monads.Styleable(styles).on("load").onstyle();
     })()
-  }
+  };
   class Section {
     constructor(properties={}) {
       private element, numbers;
@@ -102,5 +102,5 @@ log.Logger.debug(this,@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + '
       Sections({sets:[['0','1','2','3','4','5','6','7','8','9'],['\\u002D','\\u00D7','\\u00F7','\\u002B'],['0','1','2','3','4','5','6','7','8','9'],['\\u003D','\\u003D'],['10','20','30']]});
     }
   }
-  export const App = AppType();
+  export const App = AppType;
 }
