@@ -67,7 +67,8 @@ module numbers {
         if(panel) {
           angle = @theta * i;
 log.Logger.debug(this,@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + 'px)');
-          panel.style({'opacity':'1','background-color':'hsla(' + angle + ', 100%, 50%, 0.8)','-webkit-transform':@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + 'px)'});
+          //panel.style({'opacity':'1','background-color':'hsla(' + angle + ', 100%, 50%, 0.8)','-webkit-transform':@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + 'px)'});
+          panel.style({'opacity':'1','-webkit-transform':@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + 'px)'});
         }
       }
       for (  ; i < @set.length; i++ ) {
