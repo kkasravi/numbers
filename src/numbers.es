@@ -11,9 +11,8 @@ module numbers {
         @sections.push(Section({set:set}));
       }, this);
       @sections.forEach(function(section) {
-        @element.add(section);
+        @element.add(section.element);
       }, this);
-      return @element;
     }
     static style = (function() {
       var styles = [
@@ -30,7 +29,6 @@ module numbers {
         @numbers.element
       ).insert(document.body);
       @numbers.modify();
-      return @element;
     }
     static init = (function() {
       var styles = [
@@ -84,6 +82,10 @@ log.Logger.debug(this,@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + '
     }
     next() {
       @rotation += @theta * -1;
+      this.transform();
+    }
+    prev() {
+      @rotation -= @theta * -1;
       this.transform();
     }
     transform() {
