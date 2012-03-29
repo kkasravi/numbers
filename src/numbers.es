@@ -32,7 +32,7 @@ module numbers {
     }
     static init = (function() {
       var styles = [
-        {selector:'.section',style:"width:210px;height:140px;border:1px solid #CCC;-webkit-perspective:1100px;overflow:hidden;"}
+        {selector:'.section',style:"width:210px;height:180px;border:1px solid #CCC;-webkit-perspective:1100px;overflow:hidden;"}
       ];
       monads.Styleable(styles).on("load").onstyle();
     })()
@@ -64,9 +64,7 @@ module numbers {
         panel = @children[i];
         if(panel) {
           angle = @theta * i;
-log.Logger.debug(this,@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + 'px)');
-          //panel.style({'opacity':'1','background-color':'hsla(' + angle + ', 100%, 50%, 0.8)','-webkit-transform':@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + 'px)'});
-          panel.style({'opacity':'1','-webkit-transform':@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + 'px)'});
+          panel.style({'opacity':'1','-webkit-transform':@rotateFn+'('+angle+'deg) translateZ('+@radius+'px)'});
         }
       }
       for (  ; i < @set.length; i++ ) {
@@ -77,16 +75,15 @@ log.Logger.debug(this,@rotateFn + '(' + angle + 'deg) translateZ(' + @radius + '
         }
       }
       @rotation = Math.round( @rotation / @theta ) * @theta;
-      this.transform();
-      return this;
+      return this.transform();
     }
     next() {
       @rotation += @theta * -1;
-      this.transform();
+      return this.transform();
     }
     prev() {
       @rotation -= @theta * -1;
-      this.transform();
+      return this.transform();
     }
     transform() {
       @element.style({'-webkit-transform':'translateZ(-' + @radius + 'px) ' + @rotateFn + '(' + @rotation + 'deg)'});
