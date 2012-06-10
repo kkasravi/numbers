@@ -97,6 +97,73 @@ module numbers {
       monads.Styleable(styles).on("load").onstyle();
     })()
   }
+  class Equation {
+    constructor(properties={}) {
+      private sections, guessindex, instance;
+      this.onnext = this.onnext.bind(this);
+      @guessindex = 0;
+      @operation = properties.operation;
+      @sections = @equation;
+      @sections.element.style({'font-family':'Bender','color':properties.color}).textShadow(Main.shadow);
+      monads.Styleable([{selector:'.sections > .section > .numbers > .field',style:"color:"+properties.color+";"}]).on("load").onstyle();
+      @sections.sections[4].element.on(['touchend','click'],this.onnext);
+    }
+    answer() {
+      var operand1 = @instance.sections[0].numbers.children[0].text()
+      var operator = @instance.sections[1].numbers.children[0].text()
+      var operand2 = @instance.sections[2].numbers.children[0].text()
+      var value;
+      switch(operator) {
+        case '+':
+          value = parseInt(operand1) + parseInt(operand2);
+          break;
+        case '-':
+          value = parseInt(operand1) - parseInt(operand2);
+          break;
+        case 'x':
+          value = parseInt(operand1) * parseInt(operand2);
+          break;
+        default:
+          value = parseInt(operand1) / parseInt(operand2);
+          break;
+      }
+      return value;
+    }
+    guess() {
+      return parseInt(@instance.sections[4].numbers.children[@guessindex].text());
+    }
+    get equation() {
+      switch(@operation) {
+        case 'minus':
+          @instance = Sections({sets:[['99','4','9','1'],['\\u002D','\\u002D','\\u002D'],['22','8','3','9'],['\\u003D','\\u003D'],['77','84','70']]});
+          break;
+        case 'multiply':
+          @instance = Sections({sets:[['12','4','9','1'],['\\u00D7','\\u00D7','\\u00D7'],['3','8','3','9'],['\\u003D','\\u003D'],['36','40','29']]});
+          break;
+        case 'divide':
+          @instance = Sections({sets:[['24','4','9','1'],['\\u00F7','\\u00F7','\\u00F7'],['3','8','3','9'],['\\u003D','\\u003D'],['8','10','6']]});
+          break;
+        case 'plus':
+          @instance = Sections({sets:[['19','4','9','1'],['\\u002B','\\u002B','\\u002B'],['11','8','3','9'],['\\u003D','\\u003D'],['30','33','36','39']]});
+          break;
+      }
+      return @instance;
+    }
+    onnext() {
+      @guessindex++;
+      if(@guessindex === @sections.sections[4].numbers.children.length) {
+        @guessindex = 0;
+      }
+      @sections && @sections.sections && @sections.sections[4].numbers.next();
+    }
+    static init = (function() {
+      var styles = [
+        {selector:'.sections > .section',style:"border:0;width:180px;"},
+        {selector:'.sections > .section > .numbers > .field',style:"font-size:8em;background:rgba(0,0,0,0);border:0;width:auto;"}
+      ];
+      monads.Styleable(styles).on("load").onstyle();
+    })()
+  }
   class AppType {
     constructor() {
       Sections({sets:[['0','1','2','3','4','5','6','7','8','9'],['\\u002D','\\u00D7','\\u00F7','\\u002B'],['0','1','2','3','4','5','6','7','8','9'],['\\u003D','\\u003D'],['10','20','30']]});
