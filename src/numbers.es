@@ -4,7 +4,8 @@ module numbers {
   export class Sections {
     constructor(properties={sets:[]}) {
       private element, sections, sets;
-      @element = monads.DOMable({tagName:'section'}).on('load').attributes({'class':'sections'}).insert(document.body);
+      //@element = monads.DOMable({tagName:'section'}).on('load').attributes({'class':'sections'}).insert(document.body);
+      @element = monads.DOMable({tagName:'section'}).on('load').attributes({'class':'sections'});
       @sets = properties.sets;
       @sections = [];
       @sets.forEach(function(set) {
@@ -23,12 +24,12 @@ module numbers {
   };
   class Section {
     constructor(properties={}) {
-      private element, numbers;
-      @numbers = Numbers(properties);
+      private element, carousel;
+      @carousel = Carousel(properties);
       @element = monads.DOMable({tagName:'section'}).on('load').attributes({'class':'section'}).add(
-        @numbers.element
+        @carousel.element
       ).insert(document.body);
-      @numbers.modify();
+      @carousel.modify();
     }
     static init = (function() {
       var styles = [
@@ -37,11 +38,11 @@ module numbers {
       monads.Styleable(styles).on("load").onstyle();
     })()
   }
-  class Numbers {
+  class Carousel {
     constructor(properties={}) {
       private children, element, horizontal, panelCount, panelSize, radius, rotateFn, rotation, set, theta;
       @children = [];
-      @element = monads.DOMable({tagName:'div'}).on('load').attributes({'class':'numbers'});
+      @element = monads.DOMable({tagName:'div'}).on('load').attributes({'class':'carousel'});
       @rotation = 0;
       @set = properties.set;
       @panelCount = @set.length || 0;
@@ -91,7 +92,7 @@ module numbers {
     }
     static init = (function() {
       var styles = [
-        {selector:'.numbers',style:"width:100%;height:100%;position:absolute;-webkit-transform-style:preserve-3d;-webkit-transform:translateZ(-215px) rotateX(-72deg);-webkit-backface-visibility:hidden;-webkit-transition:-webkit-transform 1s;"},
+        {selector:'.carousel',style:"width:100%;height:100%;position:absolute;-webkit-transform-style:preserve-3d;-webkit-transform:translateZ(-215px) rotateX(-72deg);-webkit-backface-visibility:hidden;-webkit-transition:-webkit-transform 1s;"},
         {selector:'.field',style:"background-color:rgba(255,0,140,0.796875);opacity:0;-webkit-transform:none;display:block; position: absolute; width: 186px; height: 160px; left: 10px; top: 10px; border: 2px solid black; line-height: 116px; font-size: 80px; font-weight: bold; color: white; text-align: center;margin:0;-webkit-backface-visibility:hidden;"}
       ];
       monads.Styleable(styles).on("load").onstyle();
